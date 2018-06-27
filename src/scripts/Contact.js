@@ -2,6 +2,7 @@ const $ = require("jquery")
 const ContactCollectionModule = require("./ContactCollection")
 const ContactListModule = require("./ContactList")
 
+//gets id of current contact and passes it to the method in contact collection for deleting contacts then re-renders the dom
 const deleteContact = () => {
   console.log("delete button clicked", event.currentTarget.parentNode.id)
   const contactId = event.currentTarget.parentNode.id
@@ -11,15 +12,17 @@ const deleteContact = () => {
   })
 }
 
+//gets id of current contact and passes it to the method in contact collection for editing contacts then gets the response(the selected contact) and rerenders the dom after changes are made
 const editContact = () => {
   const contactId = event.currentTarget.parentNode.id
   ContactCollectionModule.getContact(contactId)
   .then((response) => {
-    console.log("contact to be edited", response.phone);
+    console.log("contact to be edited", response);
     buildEditContactForm(response)
   })
 }
 
+//builds edit form and fills out form with already selected contact values which allows you to change them and also sets the edit button to call a function that handles updating the database with the newly changed info
 const buildEditContactForm = (contact) => {
   const editContactArticle = document.createElement("article")
   editContactArticle.className = "edit-contact-article"
@@ -75,6 +78,7 @@ const buildEditContactForm = (contact) => {
   document.querySelector("#display-container").appendChild(editContactArticle)
 }
 
+//grabs the id, name, phone, and address of the edited contact and puts it in the database then it removes the whole form that appeared for you to edit the contact
 const editExistingContact = () => {
   const contactId = event.currentTarget.id
   const contactName = $(".name-edit-field").val()
@@ -87,6 +91,7 @@ const editExistingContact = () => {
   })
 }
 
+//creates delete button and edit button and adds the eventListeners also prints each key value to the dom
 const contact = Object.create({}, {
   "createContactComponent": {
     value: function(contact) {
